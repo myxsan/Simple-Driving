@@ -17,6 +17,8 @@ public class MainMenu : MonoBehaviour
     private const string EnergyKey = "Energy";
     private const string EnergyReadyKey = "EnergyReady";
 
+    [SerializeField] AndroidNotificationHandler androidNotificationHandler;
+
     private void Start()
     {
         SetHighestScore();
@@ -61,7 +63,12 @@ public class MainMenu : MonoBehaviour
         if(energy == 0)
         {
             DateTime energyReady = DateTime.Now.AddMinutes(energyRechargeDuration);
-            PlayerPrefs.SetString(EnergyReadyKey, energyReady.ToString()); 
+            PlayerPrefs.SetString(EnergyReadyKey, energyReady.ToString());
+
+#if UNITY_ANDROID
+            androidNotificationHandler.ScheduleNotificatoion(energyReady);
+#endif
+
         }
 
         SceneManager.LoadScene(1);
