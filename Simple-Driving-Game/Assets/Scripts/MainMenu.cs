@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -9,6 +10,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private TMP_Text highestScoreText;
     [SerializeField] private TMP_Text energyText;
+    [SerializeField] private Button playButton;
     [SerializeField] private int maxEnergy;
     [SerializeField] private int energyRechargeDuration;
 
@@ -19,8 +21,14 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] AndroidNotificationHandler androidNotificationHandler;
 
-    private void Start()
+    private void Start() {
+        OnApplicationFocus(true);
+    }
+    private void OnApplicationFocus(bool hasFocus)
     {
+        if(!hasFocus) { return; }
+        CancelInvoke();
+
         SetHighestScore();
         SetEnergy();
     }
@@ -42,8 +50,21 @@ public class MainMenu : MonoBehaviour
                 energy = maxEnergy;
                 PlayerPrefs.SetInt(EnergyKey, energy);
             }
+            else
+            {
+                playButton.interactable = false;
+                Invoke(nameof(EnergyRecharged), (energyReady - DateTime.Now).Seconds);
+            }
         }
 
+        energyText.text = $"Play ({energy})";
+    }
+
+    private void EnergyRecharged()
+    {
+        playButton.interactable = true;
+        energy = maxEnergy;
+        PlayerPrefs.SetInt(EnergyKey, energy);
         energyText.text = $"Play ({energy})";
     }
 

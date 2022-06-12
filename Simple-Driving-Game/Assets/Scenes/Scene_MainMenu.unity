@@ -554,6 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highestScoreText: {fileID: 1828200156}
   energyText: {fileID: 569102064}
+  playButton: {fileID: 1784482158}
   maxEnergy: 5
   energyRechargeDuration: 1
   androidNotificationHandler: {fileID: 1472496359}
