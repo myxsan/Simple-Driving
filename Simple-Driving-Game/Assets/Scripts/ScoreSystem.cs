@@ -8,6 +8,8 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private float scoreMultiplier;
     
+    public const string HighestScoreKey = "HighestScore";
+    
     private float score;
     void Start()
     {
@@ -19,5 +21,13 @@ public class ScoreSystem : MonoBehaviour
         score += Time.deltaTime * scoreMultiplier;
 
         scoreText.text = Mathf.FloorToInt(score).ToString("00");
+    }
+    private void OnDestroy() {
+        int currentHighScore = PlayerPrefs.GetInt(HighestScoreKey, 0);
+
+        if(score > currentHighScore)
+        {
+            PlayerPrefs.SetInt(HighestScoreKey,Mathf.FloorToInt(score));
+        }
     }
 }
